@@ -5,7 +5,8 @@ const db = new Sequelize('postgres://localhost:5432/wikistack',{
 
 
 
-//created table called 'page'
+//created table called 'page' and assigning it columns.
+//Each sub property is a column in the table/model.
 const Page = db.define('page', {
   title:{
     type: Sequelize.STRING,
@@ -14,7 +15,7 @@ const Page = db.define('page', {
   },
   slug:{
     type: Sequelize.STRING,
-    allowNull: false
+    allowNull: true
 
   },
   content:{
@@ -25,9 +26,9 @@ const Page = db.define('page', {
   status:{
     type: Sequelize.ENUM('open', 'close')
   },
-  date:{
-    type:Sequelize.DATEONLY
-  }
+  // date:{
+  //   type:Sequelize.DATEONLY
+  // }
 
 });
 

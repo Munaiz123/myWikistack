@@ -1,11 +1,12 @@
 const express = require('express');
 const morgan = require('morgan')
 const layout = require('./views/layout') // requring layout view
-const port = 3000;
+
+const userRouter = require('./routes/user'); // creating routes via express
+const wikiRouter = require('./routes/wiki');
 
 
 const app = express(); // creating an instance of the express library which will help us to talk to the database
-
 const {db} = require('./models') // activating file that connects to the database
 
 
@@ -21,6 +22,10 @@ app.get('/', (request, response, next)=>{
   )
 })
 
+
+app.use('/wiki', wikiRouter); //plugging in our routers into app.js
+app.use('/user', userRouter);
+
 // authenticates that the database is connected
 db.authenticate().then(()=>{
   console.log('DB connected.')
@@ -29,17 +34,22 @@ db.authenticate().then(()=>{
 
 const syncDB = async ()=>{
   try{
-    await db.sync({force:true}) /// db.sync is an async function so
+    // await db.sync()
+    await db.sync({force:true})
+
+    // db.sync is an async function so
     // it needs to be in a function that is 'labled' as async.
-    // also, 'force:true' DROPS everything in the database and starts fresh
+    // also, 'force:true' DROPS everything in the database and starts
+    //fresh
   } catch(error){
     console.log('error')
   }
-  // await models.db.sync();
 
-    app.listen(3000,()=>{
-      console.log(`Listening on ${port}`)
-    })
+  const port = 3000; // creates a port where can list for all incoming requests
+
+  app.listen(3000, () => {
+    console.log(`Listening on ${port}`);
+  });
 }
 
 
